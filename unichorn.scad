@@ -3,7 +3,10 @@ $fn=100;
 diameter = 60;
 height = 250;
 twists = 3;
-thickness = 0.2;
+thickness = 1;
+
+radius = diameter / 2;
+thickness_twists = twists * thickness / radius;
 
 module double_twisted_cone(diameter, height, twists) {
 	shift = diameter / 6;
@@ -20,8 +23,8 @@ module double_twisted_cone(diameter, height, twists) {
 module hollow_double_twisted_cone(diameter, height, twists, thickness) {
 	difference() {
 		double_twisted_cone(diameter, height, twists);
-		rotate([0, 0, thickness * 360])
-			translate([0, 0, -(thickness * height / twists)])
+		rotate([0, 0, thickness_twists * 360])
+			translate([0, 0, -(thickness_twists * height / twists)])
 				double_twisted_cone(diameter, height, twists);
 	}
 }
