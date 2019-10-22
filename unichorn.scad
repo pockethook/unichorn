@@ -1,6 +1,6 @@
 $fn=100;
 
-circle_diameter = 60;
+circle_diameter = 40;
 circle_shift = 10;
 height = 250;
 twists = 3;
