@@ -1,5 +1,7 @@
 $fn=100;
 
+degrees = 360;
+
 circle_diameter = 40;
 circle_shift = 10;
 height = 180;
@@ -7,8 +9,11 @@ twists = 3;
 thickness = 1;
 end_scale = 0.1;
 
+hole_height = 10;
+hole_diameter = 2;
+
 module double_twisted_cone(diameter, shift, height, twists, end_scale) {
-	twist_degrees = twists * 360;
+	twist_degrees = twists * degrees;
 	linear_extrude(height, scale=end_scale, twist=twist_degrees) {
 		union() {
 		 translate ([-shift / 2, 0])
@@ -26,7 +31,7 @@ module hollow_double_twisted_cone(
 	radius = diameter / 2;
 	min_radius = sqrt(radius * radius - shift * shift / 4);
 	thickness_twists = extrapolated_twists * thickness / min_radius;
-	thickness_twists_degrees = 360 * thickness_twists;
+	thickness_twists_degrees = degrees * thickness_twists;
 	thickness_offset = -thickness_twists * height / twists;
 	difference() {
 		double_twisted_cone(diameter, shift, height, twists, end_scale);
@@ -37,5 +42,10 @@ module hollow_double_twisted_cone(
 	}
 }
 
-hollow_double_twisted_cone(
-	circle_diameter, circle_shift, height, twists, end_scale, thickness);
+difference() {
+	hollow_double_twisted_cone(
+		circle_diameter, circle_shift, height, twists, end_scale, thickness);
+	translate([0, 0, hole_height])
+		rotate([90, 0, 90])
+			cylinder(d=hole_diameter, h=1000, center=true);
+};
