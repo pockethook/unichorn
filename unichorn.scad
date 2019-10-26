@@ -1,6 +1,7 @@
 $fn=100;
 
 degrees = 360;
+right_left = [1, -1];
 
 circle_diameter = 40;
 circle_shift = 10;
@@ -10,7 +11,8 @@ thickness = 1;
 end_scale = 0.1;
 
 hole_height = 10;
-hole_diameter = 2;
+hole_width = 7;
+hole_radius = 1;
 
 module double_twisted_cone(diameter, shift, height, twists, end_scale) {
 	twist_degrees = twists * degrees;
@@ -42,10 +44,20 @@ module hollow_double_twisted_cone(
 	}
 }
 
+module slot(radius, depth, width) {
+	hull() {
+		for (rl=right_left) {
+			translate([rl * (width / 2 - radius), 0, 0]) {
+				cylinder(r=radius, h=depth, center=true);
+			}
+		}
+	}
+}
+
 difference() {
 	hollow_double_twisted_cone(
 		circle_diameter, circle_shift, height, twists, end_scale, thickness);
 	translate([0, 0, hole_height])
 		rotate([90, 0, 90])
-			cylinder(d=hole_diameter, h=1000, center=true);
-};
+			slot(hole_radius, 1000, hole_width);
+}
